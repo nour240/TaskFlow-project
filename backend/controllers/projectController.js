@@ -1,9 +1,6 @@
 const Project = require('../models/Project');
 const Task = require('../models/Task');
 
-// @desc    Créer un nouveau projet
-// @route   POST /api/projects
-// @access  Private
 exports.createProject = async (req, res) => {
   const { title, description, dueDate } = req.body;
   const owner = req.user.id; // Récupéré par le middleware auth
@@ -30,9 +27,6 @@ exports.createProject = async (req, res) => {
   }
 };
 
-// @desc    Récupérer tous les projets (avec pagination)
-// @route   GET /api/projects
-// @access  Private
 exports.getProjects = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
   const { id: userId } = req.user;
@@ -64,9 +58,6 @@ exports.getProjects = async (req, res) => {
   }
 };
 
-// @desc    Mettre à jour un projet
-// @route   PUT /api/projects/:id
-// @access  Private
 exports.updateProject = async (req, res) => {
   const { id } = req.params;
   const { title, description, dueDate, status } = req.body;
@@ -110,9 +101,6 @@ exports.updateProject = async (req, res) => {
   }
 };
 
-// @desc    Supprimer un projet (avec cascade)
-// @route   DELETE /api/projects/:id
-// @access  Private
 exports.deleteProject = async (req, res) => {
   const { id } = req.params;
 
@@ -126,7 +114,6 @@ exports.deleteProject = async (req, res) => {
       });
     }
 
-    // Vérifier que l'utilisateur est le propriétaire
     if (project.owner.toString() !== req.user.id) {
       return res.status(403).json({
         success: false,
