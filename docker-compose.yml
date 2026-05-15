@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+
+  # Base de données MongoDB dans Docker
+  mongo:
+    image: mongo:7.0
+    container_name: taskflow_mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - taskflow-network
+
+  # Serveur Node.js / Express
+  backend:
+    build:
+      context: ./backend
+    container_name: taskflow_backend
+    restart: always
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    networks:
+      - taskflow-network
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  # Interface utilisateur
+  frontend:
+    build:
+      context: ./frontend
+    container_name: taskflow_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - taskflow-network
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  mongo-data:
+
+networks:
+  taskflow-network:
+    driver: bridge
