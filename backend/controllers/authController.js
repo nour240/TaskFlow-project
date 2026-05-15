@@ -1,124 +1,91 @@
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+const express = require("express");
+const router = express.Router();
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+const { protect } = require("../middlewares/authMiddleware");
+const {
+  validateRegister,
+  validateLogin,
+} = require("../middlewares/validateMiddleware");
 
-dotenv.config();
+// Générer un token JWT
+const generateToken = (userId) => {
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN || "7d",
+  });
+};
 
-exports.register = async (req, res) => {
-  const { fullName, email, password } = req.body;
-
+// POST /api/auth/register — Inscription
+router.post("/register", validateRegister, async (req, res) => {
   try {
-    
+    const { fullName, email, password } = req.body;
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: 'User with this email already exists'
-      });
+      return res.status(409).json({ message: "Cet email est déjà utilisé" });
     }
 
-    
-    const user = await User.create({
-      fullName,
-      email,
-      password
-    });
+    const user = await User.create({ fullName, email, password });
+    const token = generateToken(user._id);
 
-    
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
-
-    
     res.status(201).json({
-      success: true,
-      message: 'User registered successfully',
+      message: "Compte créé avec succès",
+      token,
       user: {
         id: user._id,
         fullName: user.fullName,
-        email: user.email
+        email: user.email,
       },
-      token
     });
   } catch (error) {
-    console.error('Registration error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error during registration'
-    });
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur lors de l'inscription" });
   }
-};
+});
 
-
-exports.login = async (req, res) => {
-  const { email, password } = req.body;
-
+router.post("/login", validateLogin, async (req, res) => {
   try {
-    
-    const user = await User.findOne({ email }).select('+password');
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid email or password'
-      });
+      return res.status(401).json({ message: "Email ou mot de passe incorrect" });
     }
 
-    
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid email or password'
-      });
+      return res.status(401).json({ message: "Email ou mot de passe incorrect" });
     }
 
-    
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
-
+    const token = generateToken(user._id);
 
     res.status(200).json({
-      success: true,
-      message: 'Login successful',
+      message: "Connexion réussie",
+      token,
       user: {
         id: user._id,
         fullName: user.fullName,
-        email: user.email
+        email: user.email,
       },
-      token
     });
   } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error during login'
-    });
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur lors de la connexion" });
   }
-};
+});
 
-exports.getMe = async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select('-password');
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: 'User not found'
-      });
-    }
-    res.status(200).json({
-      success: true,
-      user
-    });
-  } catch (error) {
-    console.error('Get me error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error'
-    });
-  }
-};
+router.get("/me", protect, async (req, res) => {
+  res.status(200).json({
+    user: {
+      id: req.user._id,
+      fullName: req.user.fullName,
+      email: req.user.email,
+    },
+  });
+});
+
+router.post("/logout", protect, (req, res) => {
+  res.status(200).json({ message: "Déconnexion réussie" });
+});
+
+module.exports = router;
