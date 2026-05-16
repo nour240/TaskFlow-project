@@ -27,6 +27,8 @@
         <button class="logout-btn" id="logout-btn" title="Logout">⏻</button>
       </div>
     </aside>
+
+  
     <main class="main-content">
       <div class="page-header">
         <div>
@@ -44,5 +46,45 @@
       </div>
 
       <div id="dashboard-spinner" class="spinner"></div>
+
+      
+      <div class="stats-grid">
+        <div class="stat-card accent">
+          <div class="stat-icon">📁</div>
+          <div class="stat-value" id="stat-projects">0</div>
+          <div class="stat-label">Active Projects</div>
+        </div>
+        <div class="stat-card success">
+          <div class="stat-icon">📋</div>
+          <div class="stat-value" id="stat-assigned">0</div>
+          <div class="stat-label">Assigned Tasks</div>
+        </div>
+        <div class="stat-card warning">
+          <div class="stat-icon">✅</div>
+          <div class="stat-value" id="stat-completed">0</div>
+          <div class="stat-label">Completed</div>
+        </div>
+        <div class="stat-card danger">
+          <div class="stat-icon">⚠️</div>
+          <div class="stat-value" id="stat-overdue">0</div>
+          <div class="stat-label">Overdue</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Ongoing Tasks</div>
+        </div>
+        <div class="task-list" id="ongoing-tasks"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/notifications.js"></script>
+  <script src="/js/dashboard.js"></script>
 </body>
 </html>
