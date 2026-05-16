@@ -69,3 +69,27 @@ async function loadProjects() {
     grid.innerHTML = '<div class="empty-state"><h3>Error loading projects</h3></div>';
   }
 }
+
+function renderPagination(page, totalPages) {
+  const container = document.getElementById('projects-pagination');
+  if (!container || totalPages <= 1) { if (container) container.innerHTML = ''; return; }
+  let html = `<button ${page <= 1 ? 'disabled' : ''} onclick="goToPage(${page - 1})">← Prev</button>`;
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<button class="${i === page ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+  }
+  html += `<button ${page >= totalPages ? 'disabled' : ''} onclick="goToPage(${page + 1})">Next →</button>`;
+  container.innerHTML = html;
+}
+
+function goToPage(p) { projectsPage = p; loadProjects(); }
+
+function openProjectModal() {
+  document.getElementById('project-modal-overlay')?.classList.add('active');
+}
+
+function closeProjectModal() {
+  document.getElementById('project-modal-overlay')?.classList.remove('active');
+  document.getElementById('project-form')?.reset();
+}
+
+document.addEventListener('DOMContentLoaded', initProjects);
