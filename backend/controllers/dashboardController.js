@@ -25,3 +25,11 @@ const getDashboard = async (req, res) => {
     });
 
     const priorityOrder = { haute: 3, moyenne: 2, basse: 1 };
+    const ongoingTasks = await Task.aggregate([
+        {
+            $match: {
+                assignedTo: userId,
+                status: { $ne: 'terminé' },
+            },
+        },
+    ]);
