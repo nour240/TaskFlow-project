@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TaskFlow — Project Details">
+  <title>TaskFlow — Project</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="logo-icon">T</div><h1>TaskFlow</h1></div>
+      <nav class="sidebar-nav">
+        <a href="/dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="/projects.html"><span class="nav-icon">📁</span> Projects</a>
+      </nav>
+      <div class="sidebar-user">
+        <div class="avatar" id="sidebar-user-avatar">U</div>
+        <div class="user-info">
+          <div class="user-name" id="sidebar-user-name">User</div>
+          <div class="user-email" id="sidebar-user-email"></div>
+        </div>
+        <button class="logout-btn" id="logout-btn" title="Logout">⏻</button>
+      </div>
+    </aside>
+    <main class="main-content">
+      <!-- Project Header -->
+      <div class="page-header">
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
+            <a href="/projects.html" style="color:var(--text-muted);font-size:.85rem">← Projects</a>
+            <span class="badge" id="project-status-badge"></span>
+          </div>
+          <h2 id="project-title">Loading...</h2>
+          <p class="subtitle" id="project-desc"></p>
+          <p class="subtitle" id="project-deadline" style="margin-top:2px"></p>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="notif-bell" id="notif-bell">🔔<span class="notif-badge" id="notif-badge" style="display:none">0</span>
+            <div class="notif-dropdown" id="notif-dropdown"><div class="notif-header">Notifications</div><div id="notif-list"></div></div>
+          </div>
+          <div id="project-actions"></div>
+        </div>
+      </div>
+
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-tasks">Tasks</button>
+        <button class="tab-btn" data-tab="tab-members">Members</button>
+        <button class="tab-btn" data-tab="tab-activity">Activity</button>
+      </div>
+
+
+
+      <div class="tab-panel" id="tab-tasks">
+        <!-- Filters -->
+        <div class="filters-bar">
+          <input type="text" id="filter-search" class="form-control search-input" placeholder="🔍 Search tasks..." oninput="applyFilters()">
+          <select id="filter-status" class="form-control" onchange="applyFilters()">
+            <option value="">All Status</option>
+            <option value="à faire">À faire</option>
+            <option value="en cours">En cours</option>
+            <option value="terminé">Terminé</option>
+          </select>
+          <select id="filter-priority" class="form-control" onchange="applyFilters()">
+            <option value="">All Priority</option>
+            <option value="haute">Haute</option>
+            <option value="moyenne">Moyenne</option>
+            <option value="basse">Basse</option>
+          </select>
+        </div>
+
+
+
+        <div class="card" id="task-form-card" style="margin-bottom:20px">
+          <div class="card-header">
+            <div class="card-title">Create Task</div>
+            <span class="draft-indicator" id="draft-badge" style="visibility:hidden">📝 Draft saved</span>
+          </div>
+          <form id="task-form">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div class="form-group"><label for="task-title">Title</label><input type="text" id="task-title" class="form-control" required></div>
+              <div class="form-group"><label for="task-priority">Priority</label>
+                <select id="task-priority" class="form-control"><option value="basse">Basse</option><option value="moyenne" selected>Moyenne</option><option value="haute">Haute</option></select>
+              </div>
+              <div class="form-group"><label for="task-deadline">Deadline</label><input type="date" id="task-deadline" class="form-control"></div>
+              <div class="form-group"><label for="task-assignee">Assign to</label><select id="task-assignee" class="form-control"><option value="">Unassigned</option></select></div>
+            </div>
+            <div class="form-group"><label for="task-desc">Description</label><textarea id="task-desc" class="form-control" rows="2"></textarea></div>
+            <button type="submit" class="btn btn-primary btn-sm">Create Task</button>
+          </form>
+        </div>
+
+        <div class="task-list" id="tasks-list"><div class="spinner"></div></div>
+      </div>
+
+      <!-- Tab: Members -->
+      <div class="tab-panel" id="tab-members" style="display:none">
+        <div class="card" style="margin-bottom:20px">
+          <form id="member-form" style="display:flex;gap:12px;align-items:flex-end">
+            <div class="form-group" style="flex:1;margin:0">
+              <label for="member-email">Invite by Email</label>
+              <input type="email" id="member-email" class="form-control" placeholder="colleague@example.com" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Invite</button>
+          </form>
+        </div>
+        <div class="member-list" id="members-list"></div>
+      </div>
+
+      <!-- Tab: Activity -->
+      <div class="tab-panel" id="tab-activity" style="display:none">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Activity Feed</div></div>
+          <div class="activity-feed" id="activity-feed"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/notifications.js"></script>
+  <script src="/js/project.js"></script>
+</body>
+</html>
