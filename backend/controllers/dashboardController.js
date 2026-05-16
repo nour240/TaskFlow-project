@@ -23,3 +23,5 @@ const getDashboard = async (req, res) => {
       status: { $ne: 'terminé' },
       deadline: { $lt: now, $ne: null },
     });
+
+    const priorityOrder = { haute: 3, moyenne: 2, basse: 1 };
