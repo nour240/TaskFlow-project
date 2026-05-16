@@ -47,3 +47,5 @@ const getDashboard = async (req, res) => {
           },
         },
       },
+      { $sort: { priorityOrder: -1, deadline: 1 } },
+      { $limit: 20 },
