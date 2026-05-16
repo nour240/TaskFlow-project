@@ -79,6 +79,7 @@ const getTasks = async (req, res) => {
     if (assignedTo) filter.assignedTo = assignedTo;
 
     // Keyword search on title/description
+    //  Recherche par mot-clé dans titre et description
     if (search) {
       filter.$or = [
         { title: { $regex: search, $options: 'i' } },
