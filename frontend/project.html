@@ -24,3 +24,22 @@
         <button class="logout-btn" id="logout-btn" title="Logout">⏻</button>
       </div>
     </aside>
+    <main class="main-content">
+      <!-- Project Header -->
+      <div class="page-header">
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
+            <a href="/projects.html" style="color:var(--text-muted);font-size:.85rem">← Projects</a>
+            <span class="badge" id="project-status-badge"></span>
+          </div>
+          <h2 id="project-title">Loading...</h2>
+          <p class="subtitle" id="project-desc"></p>
+          <p class="subtitle" id="project-deadline" style="margin-top:2px"></p>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="notif-bell" id="notif-bell">🔔<span class="notif-badge" id="notif-badge" style="display:none">0</span>
+            <div class="notif-dropdown" id="notif-dropdown"><div class="notif-header">Notifications</div><div id="notif-list"></div></div>
+          </div>
+          <div id="project-actions"></div>
+        </div>
+      </div>
