@@ -50,3 +50,23 @@
         <button class="tab-btn" data-tab="tab-members">Members</button>
         <button class="tab-btn" data-tab="tab-activity">Activity</button>
       </div>
+
+
+
+      <div class="tab-panel" id="tab-tasks">
+        <!-- Filters -->
+        <div class="filters-bar">
+          <input type="text" id="filter-search" class="form-control search-input" placeholder="🔍 Search tasks..." oninput="applyFilters()">
+          <select id="filter-status" class="form-control" onchange="applyFilters()">
+            <option value="">All Status</option>
+            <option value="à faire">À faire</option>
+            <option value="en cours">En cours</option>
+            <option value="terminé">Terminé</option>
+          </select>
+          <select id="filter-priority" class="form-control" onchange="applyFilters()">
+            <option value="">All Priority</option>
+            <option value="haute">Haute</option>
+            <option value="moyenne">Moyenne</option>
+            <option value="basse">Basse</option>
+          </select>
+        </div>
