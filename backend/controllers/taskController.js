@@ -117,3 +117,56 @@ const getTask = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
+
+
+const updateTask = async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) return res.status(404).json({ message: 'Task not found' });
+
+    const project = await Project.findById(task.project);
+    if (!project) return res.status(404).json({ message: 'Project not found' });
+
+    if (project.creator.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Forbidden — only the project creator can update tasks' });
+    }
+
+    const { title, description, priority, status, assignedTo, deadline } = req.body;
+
+    if (title !== undefined) task.title = title;
+    if (description !== undefined) task.description = description;
+    if (priority !== undefined) task.priority = priority;
+    if (status !== undefined) task.status = status;
+    if (deadline !== undefined) task.deadline = deadline;
+
+    // If assignedTo changed, notify the new assignee
+    if (assignedTo !== undefined && assignedTo !== (task.assignedTo?.toString() || null)) {
+      task.assignedTo = assignedTo;
+      if (assignedTo) {
+        await Notification.create({
+          recipient: assignedTo,
+          type: 'task_assigned',
+          message: `You have been assigned the task "${task.title}"`,
+          project: task.project,
+        });
+      }
+    }
+
+    await task.save();
+
+    await logActivity({
+      action: 'Task updated',
+      project: task.project,
+      user: req.user._id,
+      meta: { taskId: task._id, title: task.title },
+    });
+
+    const populated = await Task.findById(task._id)
+      .populate('assignedTo', 'fullName email')
+      .populate('project', 'title');
+
+    res.json(populated);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
