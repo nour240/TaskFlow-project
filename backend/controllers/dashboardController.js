@@ -77,8 +77,18 @@ const getDashboard = async (req, res) => {
       { $match: { assignedTo: userId } },
       { $group: { _id: '$status', count: { $sum: 1 } } },
     ]);
-    
+
     const tasksByPriority = await Task.aggregate([
       { $match: { assignedTo: userId } },
       { $group: { _id: '$priority', count: { $sum: 1 } } },
     ]);
+
+    res.json({
+      activeProjects,
+      assignedTasks,
+      completedTasks,
+      overdueTasks,
+      ongoingTasks,
+      tasksByStatus,
+      tasksByPriority,
+    });
