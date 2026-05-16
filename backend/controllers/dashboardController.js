@@ -57,3 +57,4 @@ const getDashboard = async (req, res) => {
           as: 'projectInfo',
         },
       },
+      { $unwind: { path: '$projectInfo', preserveNullAndEmptyArrays: true } },
