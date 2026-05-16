@@ -25,7 +25,7 @@
       </div>
     </aside>
     <main class="main-content">
-        <div class="page-header">
+      <div class="page-header">
         <div><h2>Projects</h2><p class="subtitle">Manage all your projects</p></div>
         <div style="display:flex;gap:12px;align-items:center">
           <div class="notif-bell" id="notif-bell">🔔<span class="notif-badge" id="notif-badge" style="display:none">0</span>
@@ -36,3 +36,30 @@
       </div>
       <div class="project-grid" id="projects-grid"><div class="spinner"></div></div>
       <div class="pagination" id="projects-pagination"></div>
+
+      <div class="modal-overlay" id="project-modal-overlay">
+        <div class="modal">
+          <div class="modal-header"><h3>Create Project</h3><button class="modal-close" id="project-modal-close">✕</button></div>
+          <form id="project-form">
+            <div class="form-group"><label for="proj-title">Title</label><input type="text" id="proj-title" class="form-control" required></div>
+            <div class="form-group"><label for="proj-desc">Description</label><textarea id="proj-desc" class="form-control"></textarea></div>
+            <div class="form-group"><label for="proj-deadline">Deadline</label><input type="date" id="proj-deadline" class="form-control"></div>
+            <div class="form-group"><label for="proj-status">Status</label>
+              <select id="proj-status" class="form-control">
+                <option value="actif">Actif</option><option value="en pause">En pause</option><option value="archivé">Archivé</option>
+              </select>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" onclick="closeProjectModal()">Cancel</button><button type="submit" class="btn btn-primary">Create</button></div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/notifications.js"></script>
+  <script src="/js/projects.js"></script>
+</body>
+</html>
