@@ -223,3 +223,49 @@ const updateTaskStatus = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
+
+
+const deleteTask = async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) return res.status(404).json({ message: 'Task not found' });
+
+    const project = await Project.findById(task.project);
+    if (!project) return res.status(404).json({ message: 'Project not found' });
+
+    if (project.creator.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Forbidden — only the project creator can delete tasks' });
+    }
+
+    // Notify assigned user
+    if (task.assignedTo) {
+      await Notification.create({
+        recipient: task.assignedTo,
+        type: 'task_deleted',
+        message: `Task "${task.title}" has been deleted`,
+        project: task.project,
+      });
+    }
+
+    await logActivity({
+      action: 'Task deleted',
+      project: task.project,
+      user: req.user._id,
+      meta: { title: task.title },
+    });
+
+    await task.deleteOne();
+    res.json({ message: 'Task deleted' });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+module.exports = {
+  createTask,
+  getTasks,
+  getTask,
+  updateTask,
+  updateTaskStatus,
+  deleteTask,
+};
