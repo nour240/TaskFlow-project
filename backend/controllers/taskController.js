@@ -170,3 +170,56 @@ const updateTask = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
+
+
+const updateTaskStatus = async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) return res.status(404).json({ message: 'Task not found' });
+
+    const project = await Project.findById(task.project);
+    if (!project) return res.status(404).json({ message: 'Project not found' });
+
+    const userId    = req.user._id.toString();
+    const isCreator = project.creator.toString() === userId;
+    const isAssigned = task.assignedTo?.toString() === userId;
+
+    if (!isCreator && !isAssigned) {
+      return res.status(403).json({ message: 'Forbidden — you can only update tasks assigned to you' });
+    }
+
+    const oldStatus = task.status;
+    task.status = req.body.status;
+    await task.save();
+
+    // Activity log
+    await logActivity({
+      action: `Task status changed from "${oldStatus}" to "${task.status}"`,
+      project: task.project,
+      user: req.user._id,
+      meta: { taskId: task._id, oldStatus, newStatus: task.status },
+    });
+
+    // Notify relevant users about status change
+    const notifyUsers = new Set();
+    if (project.creator.toString() !== userId) notifyUsers.add(project.creator.toString());
+    if (task.assignedTo && task.assignedTo.toString() !== userId) notifyUsers.add(task.assignedTo.toString());
+
+    for (const recipientId of notifyUsers) {
+      await Notification.create({
+        recipient: recipientId,
+        type: 'status_changed',
+        message: `Task "${task.title}" status changed to "${task.status}"`,
+        project: task.project,
+      });
+    }
+
+    const populated = await Task.findById(task._id)
+      .populate('assignedTo', 'fullName email')
+      .populate('project', 'title');
+
+    res.json(populated);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
