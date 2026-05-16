@@ -25,3 +25,14 @@
       </div>
     </aside>
     <main class="main-content">
+        <div class="page-header">
+        <div><h2>Projects</h2><p class="subtitle">Manage all your projects</p></div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="notif-bell" id="notif-bell">🔔<span class="notif-badge" id="notif-badge" style="display:none">0</span>
+            <div class="notif-dropdown" id="notif-dropdown"><div class="notif-header">Notifications</div><div id="notif-list"></div></div>
+          </div>
+          <button class="btn btn-primary" id="create-project-btn">+ New Project</button>
+        </div>
+      </div>
+      <div class="project-grid" id="projects-grid"><div class="spinner"></div></div>
+      <div class="pagination" id="projects-pagination"></div>
