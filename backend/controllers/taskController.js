@@ -86,7 +86,8 @@ const getTasks = async (req, res) => {
         { description: { $regex: search, $options: 'i' } },
       ];
     }
-
+    // Pagination avec skip et limit
+    // Comptage total des documents filtrés
     const [data, total] = await Promise.all([
       Task.find(filter)
         .populate('assignedTo', 'fullName email')
