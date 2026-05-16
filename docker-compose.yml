@@ -1,56 +1,50 @@
-version: "3.9"
-
 services:
-
-  # Base de données MongoDB dans Docker
+  # MongoDB 
   mongo:
-    image: mongo:7.0
-    container_name: taskflow_mongo
-    restart: always
+    image: mongo:7
+    container_name: taskflow-mongo
+    restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
-      - mongo-data:/data/db
+      - mongo_data:/data/db
     networks:
-      - taskflow-network
+      - taskflow-net
 
-  # Serveur Node.js / Express
+  # Backend (Express API) 
   backend:
     build:
       context: ./backend
-    container_name: taskflow_backend
-    restart: always
-    ports:
-      - "5000:5000"
+      dockerfile: Dockerfile
+    container_name: taskflow-backend
+    restart: unless-stopped
     env_file:
       - .env
+    ports:
+      - "5050:5000"
     depends_on:
       - mongo
     networks:
-      - taskflow-network
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
+      - taskflow-net
 
-  # Interface utilisateur
+  #Frontend (Nginx) 
   frontend:
-    build:
-      context: ./frontend
-    container_name: taskflow_frontend
-    restart: always
+    image: nginx:alpine
+    container_name: taskflow-frontend
+    restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - backend
     networks:
-      - taskflow-network
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - taskflow-net
 
 volumes:
-  mongo-data:
+  mongo_data:
 
 networks:
-  taskflow-network:
+  taskflow-net:
     driver: bridge
