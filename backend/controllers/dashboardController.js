@@ -25,11 +25,25 @@ const getDashboard = async (req, res) => {
     });
 
     const priorityOrder = { haute: 3, moyenne: 2, basse: 1 };
+    
     const ongoingTasks = await Task.aggregate([
-        {
-            $match: {
-                assignedTo: userId,
-                status: { $ne: 'terminé' },
-            },
+      {
+        $match: {
+          assignedTo: userId,
+          status: { $ne: 'terminé' },
         },
-    ]);
+      },
+      {
+        $addFields: {
+          priorityOrder: {
+            $switch: {
+              branches: [
+                { case: { $eq: ['$priority', 'haute'] }, then: 3 },
+                { case: { $eq: ['$priority', 'moyenne'] }, then: 2 },
+                { case: { $eq: ['$priority', 'basse'] }, then: 1 },
+              ],
+              default: 0,
+            },
+          },
+        },
+      },
