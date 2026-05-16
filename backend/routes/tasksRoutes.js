@@ -13,5 +13,7 @@ router.route('/').get(getTasks).post(validateTask, createTask);
 //  met à jour complètement la tâche
 // DELETE supprime la tâche
 router.route('/:id').get(getTask).put(validateTask, updateTask).delete(deleteTask);
+// Permet de mettre à jour UNIQUEMENT le statut sans modifier toute la tâche
+// validateTaskStatus vérifie que le statut est valide (enum)
 router.patch('/:id/status', validateTaskStatus, updateTaskStatus);
 module.exports = router;
