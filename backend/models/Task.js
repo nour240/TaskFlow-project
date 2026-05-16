@@ -35,6 +35,7 @@ const taskSchema = new mongoose.Schema(
       ref: 'Project',
       required: [true, 'A task must belong to a project'],
     },
+    //ajout de assignedTo
     assignedTo: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

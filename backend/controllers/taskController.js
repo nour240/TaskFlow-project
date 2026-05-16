@@ -46,7 +46,7 @@ const createTask = async (req, res) => {
         project,
       });
     }
-
+//ajout de populate
     const populated = await Task.findById(task._id)
       .populate('assignedTo', 'fullName email')
       .populate('project', 'title');
@@ -81,7 +81,7 @@ const getTasks = async (req, res) => {
         { description: { $regex: search, $options: 'i' } },
       ];
     }
-
+//ajout de populate
     const [data, total] = await Promise.all([
       Task.find(filter)
         .populate('assignedTo', 'fullName email')
@@ -103,7 +103,7 @@ const getTasks = async (req, res) => {
   }
 };
 
-
+//ajout de populate
 const getTask = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id)
@@ -160,7 +160,7 @@ const updateTask = async (req, res) => {
       user: req.user._id,
       meta: { taskId: task._id, title: task.title },
     });
-
+//ajout de populate
     const populated = await Task.findById(task._id)
       .populate('assignedTo', 'fullName email')
       .populate('project', 'title');

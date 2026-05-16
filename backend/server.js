@@ -24,9 +24,12 @@ app.use(morgan('dev'));
 //Mount Routes 
 app.use('/api/auth',          authRoutes);
 app.use('/api/projects',      projectRoutes);
+//ajout memberRoutes
 app.use('/api/projects',      memberRoutes);   
 app.use('/api/projects',      activityRoutes); 
+//ajout de taskRoutes 
 app.use('/api/tasks',         taskRoutes);
+//ajout dashboardRoutes
 app.use('/api/dashboard',     dashboardRoutes);
 app.use('/api/notifications', notificationRoutes);
 
