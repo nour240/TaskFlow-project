@@ -34,4 +34,11 @@ const projectSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+projectSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
+  const Task = mongoose.model('Task');
+  await Task.deleteMany({ project: this._id });
+  next();
+});
+
 module.exports = mongoose.model('Project', projectSchema);
