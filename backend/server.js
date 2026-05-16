@@ -29,7 +29,8 @@ app.use('/api/projects',      memberRoutes);
 app.use('/api/projects',      activityRoutes); 
 //ajout de taskRoutes 
 app.use('/api/tasks',         taskRoutes);
-//ajout dashboardRoutes
+
+// DASHBOARD ROUTES
 app.use('/api/dashboard',     dashboardRoutes);
 app.use('/api/notifications', notificationRoutes);
 
