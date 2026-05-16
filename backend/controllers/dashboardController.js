@@ -49,3 +49,11 @@ const getDashboard = async (req, res) => {
       },
       { $sort: { priorityOrder: -1, deadline: 1 } },
       { $limit: 20 },
+      {
+        $lookup: {
+          from: 'projects',
+          localField: 'project',
+          foreignField: '_id',
+          as: 'projectInfo',
+        },
+      },
