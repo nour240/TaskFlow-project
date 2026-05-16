@@ -5,3 +5,5 @@ const {
   createTask, getTasks, getTask, updateTask, updateTaskStatus, deleteTask,
 } = require('../controllers/taskController');
 router.use(protect);
+router.route('/').get(getTasks).post(validateTask, createTask);
+router.route('/:id').get(getTask).put(validateTask, updateTask).delete(deleteTask);
