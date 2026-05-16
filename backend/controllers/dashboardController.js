@@ -17,3 +17,9 @@ const getDashboard = async (req, res) => {
       assignedTo: userId,
       status: 'terminé',
     });
+
+    const overdueTasks = await Task.countDocuments({
+      assignedTo: userId,
+      status: { $ne: 'terminé' },
+      deadline: { $lt: now, $ne: null },
+    });
