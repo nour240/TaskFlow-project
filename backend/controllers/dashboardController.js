@@ -12,3 +12,8 @@ const getDashboard = async (req, res) => {
       $or: [{ creator: userId }, { members: userId }],
     });
     const assignedTasks = await Task.countDocuments({ assignedTo: userId });
+
+    const completedTasks = await Task.countDocuments({
+      assignedTo: userId,
+      status: 'terminé',
+    });
