@@ -11,6 +11,7 @@ const getDashboard = async (req, res) => {
       status: 'actif',
       $or: [{ creator: userId }, { members: userId }],
     });
+
     const assignedTasks = await Task.countDocuments({ assignedTo: userId });
 
     const completedTasks = await Task.countDocuments({
@@ -25,7 +26,7 @@ const getDashboard = async (req, res) => {
     });
 
     const priorityOrder = { haute: 3, moyenne: 2, basse: 1 };
-    
+
     const ongoingTasks = await Task.aggregate([
       {
         $match: {
@@ -58,3 +59,16 @@ const getDashboard = async (req, res) => {
         },
       },
       { $unwind: { path: '$projectInfo', preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          title: 1,
+          description: 1,
+          priority: 1,
+          status: 1,
+          deadline: 1,
+          createdAt: 1,
+          'projectInfo.title': 1,
+          'projectInfo._id': 1,
+        },
+      },
+    ]);
