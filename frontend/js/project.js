@@ -19,6 +19,9 @@ async function initProjectPage() {
 async function loadProject(id) {
   try {
     const res = await API.getProject(id);
+// Il récupère les valeurs des filtres (status, priority, search), construit les
+// query params pour l'API, affiche les résultats paginés et réinitialise la
+// page à 1 quand un filtre change. La variable tasksPage gère la pagination.
     currentProject = res.data;
     isCreator = currentProject.creator._id === currentUser._id;
     renderProjectHeader();

@@ -66,15 +66,20 @@ const getTasks = async (req, res) => {
     const page  = Math.max(parseInt(p, 10) || 1, 1);
     const limit = Math.min(Math.max(parseInt(l, 10) || 10, 1), 100);
     const skip  = (page - 1) * limit;
+    
+// Initialisation du filtre MongoDB vide
 
     const filter = {};
 
     if (project) filter.project = project;
+    // F6-CTRL-02: Filtre par statut de la tâche
+   // Valeurs acceptées: "à faire", "en cours", "terminé"
     if (status) filter.status = status;
     if (priority) filter.priority = priority;
     if (assignedTo) filter.assignedTo = assignedTo;
 
     // Keyword search on title/description
+    //  Recherche par mot-clé dans titre et description
     if (search) {
       filter.$or = [
         { title: { $regex: search, $options: 'i' } },
