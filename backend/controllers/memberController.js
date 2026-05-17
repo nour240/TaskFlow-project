@@ -58,76 +58,68 @@ const addMember = async (req, res) => {
 
 /* Remove a member from a project. */
 const removeMember = async (req, res) => {
-
   try {
-
     const project = await Project.findById(req.params.id);
-
     if (!project) return res.status(404).json({ message: 'Project not found' });
 
     if (project.creator.toString() !== req.user._id.toString()) {
-
       return res.status(403).json({ message: 'Forbidden — only the creator can manage members' });
-
     }
 
     const { memberId } = req.params;
-
     const memberIndex = project.members.findIndex(
-
       (m) => m.toString() === memberId
-
     );
 
     if (memberIndex === -1) {
-
       return res.status(404).json({ message: 'Member not found in this project' });
-
     }
 
     project.members.splice(memberIndex, 1);
-
     await project.save();
 
+    // Activity log
     await logActivity({
-
       action: 'Member removed',
-
       project: project._id,
-
       user: req.user._id,
-
       meta: { memberId },
-
     });
 
+    // Notification
     await Notification.create({
-
       recipient: memberId,
-
       type: 'member_removed',
-
       message: `You have been removed from the project "${project.title}"`,
-
       project: project._id,
-
     });
 
     const populated = await Project.findById(project._id)
-
       .populate('creator', 'fullName email')
-
       .populate('members', 'fullName email');
 
     res.json(populated);
-
   } catch (err) {
-
     res.status(500).json({ message: 'Server error', error: err.message });
-
   }
-
 };
 
+/* List members of a project. */
+const getMembers = async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id)
+      .populate('members', 'fullName email')
+      .populate('creator', 'fullName email');
 
-module.exports = { addMember, removeMember };
+    if (!project) return res.status(404).json({ message: 'Project not found' });
+
+    res.json({
+      creator: project.creator,
+      members: project.members,
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+module.exports = { addMember, removeMember, getMembers };
