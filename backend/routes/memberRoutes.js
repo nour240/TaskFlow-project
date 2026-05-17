@@ -5,13 +5,13 @@ const { addMember, removeMember, getMembers } = require('../controllers/memberCo
 
 router.use(protect);
 
-// GET → creator or member can view the member list
+// GET = creator or member can view the member list
 router.get('/:id/members', isProjectMember, getMembers);
 
-// POST → creator only can invite members
+// POST = creator only can invite members
 router.post('/:id/members', isProjectCreator, addMember);
 
-// DELETE → creator only can remove members
+// DELETE = creator only can remove members
 router.delete('/:id/members/:memberId', isProjectCreator, removeMember);
 
 module.exports = router;
