@@ -136,13 +136,21 @@ function setupTaskForm(projectId) {
   const draftKey = `taskflow_draft_${projectId}`;
   const draft = JSON.parse(localStorage.getItem(draftKey) || 'null');
   if (draft) {
-    document.getElementById('task-title').value = draft.title || '';
-    document.getElementById('task-desc').value = draft.description || '';
-    document.getElementById('task-priority').value = draft.priority || 'moyenne';
-    document.getElementById('task-deadline').value = draft.deadline || '';
-    document.getElementById('task-assignee').value = draft.assignedTo || '';
-    document.getElementById('draft-badge')?.classList.add('visible');
-    showToast('Draft restored', 'info');
+    const restoreDraft = window.confirm(
+      'Un brouillon a été sauvegardé pour ce projet.\n\nVoulez-vous le restaurer ?\n\nCliquez sur OK pour restaurer, ou Annuler pour repartir d\'un formulaire vide.'
+    );
+    if (restoreDraft) {
+      document.getElementById('task-title').value    = draft.title       || '';
+      document.getElementById('task-desc').value     = draft.description || '';
+      document.getElementById('task-priority').value = draft.priority    || 'moyenne';
+      document.getElementById('task-deadline').value = draft.deadline    || '';
+      document.getElementById('task-assignee').value = draft.assignedTo  || '';
+      document.getElementById('draft-badge')?.classList.add('visible');
+      showToast('Brouillon restauré', 'info');
+    } else {
+      localStorage.removeItem(draftKey);
+      showToast('Formulaire vide — brouillon supprimé', 'info');
+    }
   }
 
   // Auto-save on input
