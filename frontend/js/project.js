@@ -153,6 +153,8 @@ function setupTaskForm(projectId) {
     }
   }
 
+  
+
   // Auto-save on input
   form.querySelectorAll('input, textarea, select').forEach(el => {
     el.addEventListener('input', () => {
