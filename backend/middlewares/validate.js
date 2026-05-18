@@ -28,6 +28,17 @@ const validateLogin = [
 ];
 
 
+/* ── Project validation rules ────────────────────────── */
+const validateProject = [
+  body('title').trim().notEmpty().withMessage('Project title is required'),
+  body('status')
+    .optional()
+    .isIn(['actif', 'en pause', 'archivé'])
+    .withMessage('Status must be actif, en pause, or archivé'),
+  handleValidation,
+];
+
+
 module.exports = {
   validateSignup,
   validateLogin,
