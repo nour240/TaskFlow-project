@@ -527,3 +527,43 @@ textarea.form-control { resize: vertical; min-height: 80px; }
   from { transform: translateX(100%); opacity: 0; }
   to { transform: translateX(0); opacity: 1; }
 }
+
+
+/* ── Auth Pages ─────────────────────────────────────────── */
+.auth-page {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg-primary);
+  padding: 20px;
+}
+.auth-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 48px 40px;
+  width: 100%; max-width: 440px;
+  box-shadow: var(--shadow-lg);
+}
+.auth-card .auth-logo {
+  text-align: center; margin-bottom: 32px;
+}
+.auth-card .auth-logo .logo-icon {
+  width: 56px; height: 56px;
+  background: var(--gradient-accent);
+  border-radius: var(--radius-lg);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 28px; color: #fff; font-weight: 800;
+  margin-bottom: 12px;
+}
+.auth-card .auth-logo h2 {
+  font-size: 1.5rem; font-weight: 800;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.auth-card .auth-logo p { color: var(--text-muted); font-size: .85rem; margin-top: 4px; }
+.auth-card .auth-footer {
+  text-align: center; margin-top: 20px;
+  font-size: .85rem; color: var(--text-muted);
+}
+.auth-card .btn { width: 100%; justify-content: center; padding: 12px; margin-top: 8px; }
