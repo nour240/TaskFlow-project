@@ -20,3 +20,4 @@ meta: {
   default: {},
 },
 { timestamps: true }
+activitySchema.index({ project: 1, createdAt: -1 });
