@@ -1,29 +1,56 @@
+// Aggregation pipeline for dashboard statistics
 const mongoose = require('mongoose');
 const Project  = require('../models/Project');
 const Task     = require('../models/Task');
 
+// Returns aggregated stats for the current user
 const getDashboard = async (req, res) => {
   try {
     const userId = req.user._id;
     const now    = new Date();
 
-    const activeProjects = await Project.countDocuments({
-      status: 'actif',
-      $or: [{ creator: userId }, { members: userId }],
-    });
+    // Active projects (creator or member, status = actif)
+    const activeProjectsAgg = await Project.aggregate([
+      {
+        $match: {
+          status: 'actif',
+          $or: [{ creator: userId }, { members: userId }],
+        },
+      },
+      { $count: 'count' },
+    ]);
+    const activeProjects = activeProjectsAgg[0]?.count ?? 0;
 
-    const assignedTasks = await Task.countDocuments({ assignedTo: userId });
+    
+    const assignedTasksAgg = await Task.aggregate([
+      { $match: { assignedTo: userId } },
+      { $count: 'count' },
+    ]);
+    const assignedTasks = assignedTasksAgg[0]?.count ?? 0;
 
-    const completedTasks = await Task.countDocuments({
-      assignedTo: userId,
-      status: 'terminé',
-    });
+    const completedTasksAgg = await Task.aggregate([
+      {
+        $match: {
+          assignedTo: userId,
+          status: 'terminé',
+        },
+      },
+      { $count: 'count' },
+    ]);
+    const completedTasks = completedTasksAgg[0]?.count ?? 0;
 
-    const overdueTasks = await Task.countDocuments({
-      assignedTo: userId,
-      status: { $ne: 'terminé' },
-      deadline: { $lt: now, $ne: null },
-    });
+    const overdueTasksAgg = await Task.aggregate([
+      {
+        $match: {
+          assignedTo: userId,
+          status: { $ne: 'terminé' },
+          deadline: { $lt: now, $ne: null },
+        },
+      },
+      { $count: 'count' },
+    ]);
+
+    const overdueTasks = overdueTasksAgg[0]?.count ?? 0;
 
     const priorityOrder = { haute: 3, moyenne: 2, basse: 1 };
 
