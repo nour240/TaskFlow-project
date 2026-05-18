@@ -6,7 +6,7 @@ const connectDB = require('./config/db');
 
 const authRoutes         = require('./routes/authRoutes');
 const projectRoutes      = require('./routes/projectRoutes');
-const taskRoutes         = require('./routes/taskRoutes');
+const taskRoutes         = require('./routes/tasksRoutes');
 const memberRoutes       = require('./routes/memberRoutes');
 const dashboardRoutes    = require('./routes/dashboardRoutes');
 const activityRoutes     = require('./routes/activityRoutes');
