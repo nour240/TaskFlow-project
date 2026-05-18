@@ -1,3 +1,5 @@
+/* Project Detail Module
+ * Tasks CRUD, members, activities, auto-save drafts.*/
 let currentProject = null;
 let currentUser = null;
 let isCreator = false;
@@ -19,9 +21,6 @@ async function initProjectPage() {
 async function loadProject(id) {
   try {
     const res = await API.getProject(id);
-// Il récupère les valeurs des filtres (status, priority, search), construit les
-// query params pour l'API, affiche les résultats paginés et réinitialise la
-// page à 1 quand un filtre change. La variable tasksPage gère la pagination.
     currentProject = res.data;
     isCreator = currentProject.creator._id === currentUser._id;
     renderProjectHeader();
@@ -126,49 +125,157 @@ async function deleteTask(taskId) {
   }
 }
 
-/* ── Task Form with Auto-Save ─────────────────────────── */
-function setupTaskForm(projectId) {
+/* Task Form with Auto-Save Drafts (Feature 7) ─────── */
+let _draftSaveTimer = null;
+
+/**
+ * getDraftKey – Returns a project-specific LocalStorage key.
+ * Format: draft_task_project_<id>
+ */
+function getDraftKey(projectId) {
+  return `draft_task_project_${projectId}`;
+}
+
+/**
+ * serializeTaskForm – Reads all task form fields into a plain object.
+ */
+function serializeTaskForm() {
+  return {
+    title: document.getElementById('task-title').value,
+    description: document.getElementById('task-desc').value,
+    priority: document.getElementById('task-priority').value,
+    deadline: document.getElementById('task-deadline').value,
+    assignedTo: document.getElementById('task-assignee').value,
+  };
+}
+
+/**
+ * saveDraftToStorage – Debounced writer (300 ms) to avoid thrashing
+ * LocalStorage on every keystroke.
+ */
+function saveDraftToStorage(draftKey) {
+  clearTimeout(_draftSaveTimer);
+  _draftSaveTimer = setTimeout(() => {
+    const data = serializeTaskForm();
+    localStorage.setItem(draftKey, JSON.stringify(data));
+    showDraftBadge(true);
+  }, 300);
+}
+
+/*showDraftBadge – Toggle the "📝 Draft saved" indicator with animation.
+ */
+function showDraftBadge(visible) {
+  const badge = document.getElementById('draft-badge');
+  if (!badge) return;
+  if (visible) {
+    badge.classList.add('visible');
+  } else {
+    badge.classList.remove('visible');
+  }
+}
+
+/**
+ * populateFormFromDraft – Fills the form fields with saved draft data.
+ */
+function populateFormFromDraft(draft) {
+  if (!draft) return;
+  document.getElementById('task-title').value = draft.title || '';
+  document.getElementById('task-desc').value = draft.description || '';
+  document.getElementById('task-priority').value = draft.priority || 'moyenne';
+  document.getElementById('task-deadline').value = draft.deadline || '';
+  // Assignee might not exist in the dropdown yet (members load async),
+  // so we defer it and store the value for later.
+  const assigneeSelect = document.getElementById('task-assignee');
+  if (assigneeSelect) {
+    // Try setting now; will also be retried after members load.
+    assigneeSelect.value = draft.assignedTo || '';
+    assigneeSelect.dataset.pendingDraftValue = draft.assignedTo || '';
+  }
+}
+
+/**
+ * showDraftRestoreModal – Presents a styled modal asking the user
+ * whether to restore the saved draft or discard it.
+ * Returns a Promise<boolean>.
+ */
+function showDraftRestoreModal() {
+  return new Promise((resolve) => {
+    // Build overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.id = 'draft-restore-overlay';
+    overlay.innerHTML = `
+      <div class="modal" role="dialog" aria-labelledby="draft-modal-title">
+        <div class="modal-header">
+          <h3 id="draft-modal-title">📝 Unsaved Draft Found</h3>
+          <button class="modal-close" id="draft-modal-close" aria-label="Close">&times;</button>
+        </div>
+        <p style="color:var(--text-secondary);font-size:.9rem;line-height:1.6;margin-bottom:8px">
+          You have an unsaved draft for this project's task form.
+          Would you like to <strong>restore</strong> it and continue where you left off,
+          or <strong>discard</strong> it and start fresh?
+        </p>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" id="draft-discard-btn">Discard Draft</button>
+          <button class="btn btn-primary btn-sm" id="draft-restore-btn">Restore Draft</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    // Animate in
+    requestAnimationFrame(() => overlay.classList.add('active'));
+
+    function cleanup(result) {
+      overlay.classList.remove('active');
+      setTimeout(() => overlay.remove(), 250);
+      resolve(result);
+    }
+
+    document.getElementById('draft-restore-btn').addEventListener('click', () => cleanup(true));
+    document.getElementById('draft-discard-btn').addEventListener('click', () => cleanup(false));
+    document.getElementById('draft-modal-close').addEventListener('click', () => cleanup(false));
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) cleanup(false);
+    });
+  });
+}
+
+/**
+ * setupTaskForm – Main entry point for the task creation form.
+ * Handles draft restoration, auto-save on input, and cleanup on submit.
+ */
+async function setupTaskForm(projectId) {
   const form = document.getElementById('task-form');
   if (!form) return;
-  if (!isCreator) { form.style.display = 'none'; return; }
+  if (!isCreator) {
+    document.getElementById('task-form-card').style.display = 'none';
+    return;
+  }
 
-  // Restore draft
-  const draftKey = `taskflow_draft_${projectId}`;
-  const draft = JSON.parse(localStorage.getItem(draftKey) || 'null');
-  if (draft) {
-    const restoreDraft = window.confirm(
-      'Un brouillon a été sauvegardé pour ce projet.\n\nVoulez-vous le restaurer ?\n\nCliquez sur OK pour restaurer, ou Annuler pour repartir d\'un formulaire vide.'
-    );
-    if (restoreDraft) {
-      document.getElementById('task-title').value    = draft.title       || '';
-      document.getElementById('task-desc').value     = draft.description || '';
-      document.getElementById('task-priority').value = draft.priority    || 'moyenne';
-      document.getElementById('task-deadline').value = draft.deadline    || '';
-      document.getElementById('task-assignee').value = draft.assignedTo  || '';
-      document.getElementById('draft-badge')?.classList.add('visible');
-      showToast('Brouillon restauré', 'info');
+  const draftKey = getDraftKey(projectId);
+
+  // ── 1. Draft Restoration ────────────────────────────────
+  const savedDraft = JSON.parse(localStorage.getItem(draftKey) || 'null');
+  if (savedDraft) {
+    const shouldRestore = await showDraftRestoreModal();
+    if (shouldRestore) {
+      populateFormFromDraft(savedDraft);
+      showDraftBadge(true);
+      showToast('Draft restored successfully', 'info');
     } else {
       localStorage.removeItem(draftKey);
-      showToast('Formulaire vide — brouillon supprimé', 'info');
+      showDraftBadge(false);
     }
   }
 
-  
-
-  // Auto-save on input
+  // ── 2. Auto-Save on Input / Change ──────────────────────
   form.querySelectorAll('input, textarea, select').forEach(el => {
-    el.addEventListener('input', () => {
-      const data = {
-        title: document.getElementById('task-title').value,
-        description: document.getElementById('task-desc').value,
-        priority: document.getElementById('task-priority').value,
-        deadline: document.getElementById('task-deadline').value,
-        assignedTo: document.getElementById('task-assignee').value,
-      };
-      localStorage.setItem(draftKey, JSON.stringify(data));
-    });
+    el.addEventListener('input', () => saveDraftToStorage(draftKey));
+    el.addEventListener('change', () => saveDraftToStorage(draftKey));
   });
 
+  // ── 3. Submission & Cleanup ─────────────────────────────
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = form.querySelector('button[type="submit"]');
@@ -184,7 +291,9 @@ function setupTaskForm(projectId) {
       });
       showToast('Task created!', 'success');
       form.reset();
+      // Cleanup: remove draft from LocalStorage after successful submission
       localStorage.removeItem(draftKey);
+      showDraftBadge(false);
       loadTasks();
       loadActivities();
     } catch (err) {
@@ -193,8 +302,15 @@ function setupTaskForm(projectId) {
     btn.disabled = false;
   });
 
-  // Populate assignee dropdown
-  loadAssigneeOptions(projectId);
+  // ── 4. Populate assignee dropdown ───────────────────────
+  await loadAssigneeOptions(projectId);
+
+  // After members are loaded, re-apply pending draft assignee value
+  const assigneeSelect = document.getElementById('task-assignee');
+  if (assigneeSelect?.dataset.pendingDraftValue) {
+    assigneeSelect.value = assigneeSelect.dataset.pendingDraftValue;
+    delete assigneeSelect.dataset.pendingDraftValue;
+  }
 }
 
 async function loadAssigneeOptions(projectId) {

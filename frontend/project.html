@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <div class="app-layout">
+  <div class="app-layout">
     <aside class="sidebar">
       <div class="sidebar-logo"><div class="logo-icon">T</div><h1>TaskFlow</h1></div>
       <nav class="sidebar-nav">
@@ -24,6 +24,7 @@
         <button class="logout-btn" id="logout-btn" title="Logout">⏻</button>
       </div>
     </aside>
+
     <main class="main-content">
       <!-- Project Header -->
       <div class="page-header">
@@ -44,15 +45,14 @@
         </div>
       </div>
 
-
+      <!-- Tabs -->
       <div class="tabs">
         <button class="tab-btn active" data-tab="tab-tasks">Tasks</button>
         <button class="tab-btn" data-tab="tab-members">Members</button>
         <button class="tab-btn" data-tab="tab-activity">Activity</button>
       </div>
 
-
-
+      <!-- Tab: Tasks -->
       <div class="tab-panel" id="tab-tasks">
         <!-- Filters -->
         <div class="filters-bar">
@@ -71,8 +71,7 @@
           </select>
         </div>
 
-
-
+        <!-- Create Task Form (creator only) -->
         <div class="card" id="task-form-card" style="margin-bottom:20px">
           <div class="card-header">
             <div class="card-title">Create Task</div>
