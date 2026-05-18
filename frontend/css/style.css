@@ -283,3 +283,28 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 .badge-actif { background: var(--success-bg); color: var(--success); }
 .badge-pause { background: var(--warning-bg); color: var(--warning); }
 .badge-archive { background: rgba(107,114,128,.15); color: var(--text-muted); }
+
+
+/* ── Task List ──────────────────────────────────────────── */
+.task-list { display: flex; flex-direction: column; gap: 8px; }
+.task-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: var(--transition);
+  cursor: pointer;
+}
+.task-item:hover { border-color: var(--accent); transform: translateX(4px); }
+.task-priority-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.task-priority-dot.haute { background: var(--haute); }
+.task-priority-dot.moyenne { background: var(--moyenne); }
+.task-priority-dot.basse { background: var(--basse); }
+.task-item .task-title { flex: 1; font-weight: 500; font-size: .9rem; }
+.task-item .task-meta {
+  display: flex; align-items: center; gap: 10px;
+  font-size: .75rem; color: var(--text-muted);
+}
