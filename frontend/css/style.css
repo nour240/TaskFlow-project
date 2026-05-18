@@ -444,3 +444,20 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 .notif-item.unread { border-left: 3px solid var(--accent); }
 .notif-item .notif-msg { font-size: .82rem; margin-bottom: 4px; }
 .notif-item .notif-time { font-size: .7rem; color: var(--text-muted); }
+
+
+/* ── Activity Feed ──────────────────────────────────────── */
+.activity-feed { display: flex; flex-direction: column; gap: 0; }
+.activity-item {
+  display: flex; gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.activity-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 6px; flex-shrink: 0;
+}
+.activity-text { font-size: .85rem; }
+.activity-time { font-size: .72rem; color: var(--text-muted); margin-top: 2px; }
