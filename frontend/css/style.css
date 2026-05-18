@@ -308,3 +308,50 @@ textarea.form-control { resize: vertical; min-height: 80px; }
   display: flex; align-items: center; gap: 10px;
   font-size: .75rem; color: var(--text-muted);
 }
+
+
+/* ── Project Grid ───────────────────────────────────────── */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+.project-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+}
+.project-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-glow);
+}
+.project-card .project-title {
+  font-size: 1.05rem; font-weight: 700;
+  margin-bottom: 8px;
+}
+.project-card .project-desc {
+  font-size: .82rem; color: var(--text-secondary);
+  margin-bottom: 16px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.project-card .project-footer {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.project-card .members-avatars {
+  display: flex;
+}
+.project-card .members-avatars .mini-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--gradient-accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .65rem; color: #fff; font-weight: 700;
+  margin-left: -8px;
+  border: 2px solid var(--bg-card);
+}
+.project-card .members-avatars .mini-avatar:first-child { margin-left: 0; }
