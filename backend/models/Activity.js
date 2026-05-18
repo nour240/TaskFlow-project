@@ -15,3 +15,7 @@ user: {
   ref: 'User',
   required: true,
 },
+meta: {
+  type: mongoose.Schema.Types.Mixed,
+  default: {},
+},
