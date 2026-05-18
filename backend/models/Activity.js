@@ -21,3 +21,4 @@ meta: {
 },
 { timestamps: true }
 activitySchema.index({ project: 1, createdAt: -1 });
+module.exports = mongoose.model('Activity', activitySchema);
