@@ -265,3 +265,21 @@ input, textarea, select { font-family: inherit; }
 .form-control::placeholder { color: var(--text-muted); }
 select.form-control { appearance: none; cursor: pointer; }
 textarea.form-control { resize: vertical; min-height: 80px; }
+
+/* ── Badges ─────────────────────────────────────────────── */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: .7rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .5px;
+}
+.badge-haute { background: var(--danger-bg); color: var(--danger); }
+.badge-moyenne { background: var(--warning-bg); color: var(--warning); }
+.badge-basse { background: var(--success-bg); color: var(--success); }
+.badge-afaire { background: var(--info-bg); color: var(--info); }
+.badge-encours { background: var(--warning-bg); color: var(--warning); }
+.badge-termine { background: var(--success-bg); color: var(--success); }
+.badge-actif { background: var(--success-bg); color: var(--success); }
+.badge-pause { background: var(--warning-bg); color: var(--warning); }
+.badge-archive { background: rgba(107,114,128,.15); color: var(--text-muted); }
