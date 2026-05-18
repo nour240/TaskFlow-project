@@ -62,3 +62,88 @@ ul { list-style: none; }
 img { max-width: 100%; }
 button { cursor: pointer; font-family: inherit; }
 input, textarea, select { font-family: inherit; }
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+.sidebar {
+  width: 260px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
+  transition: var(--transition);
+}
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+.sidebar-logo .logo-icon {
+  width: 36px; height: 36px;
+  background: var(--gradient-accent);
+  border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: #fff; font-weight: 800;
+}
+.sidebar-logo h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.sidebar-nav { flex: 1; }
+.sidebar-nav a {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: .9rem;
+  transition: var(--transition);
+  margin-bottom: 4px;
+}
+.sidebar-nav a:hover, .sidebar-nav a.active {
+  background: var(--accent-glow);
+  color: var(--accent);
+}
+.sidebar-nav a .nav-icon {
+  width: 20px; text-align: center; font-size: 1.1rem;
+}
+.sidebar-user {
+  padding: 16px 8px 0;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.sidebar-user .avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--gradient-accent);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: .85rem;
+}
+.sidebar-user .user-info { flex: 1; }
+.sidebar-user .user-name { font-size: .85rem; font-weight: 600; }
+.sidebar-user .user-email { font-size: .7rem; color: var(--text-muted); }
+.sidebar-user .logout-btn {
+  background: none; border: none;
+  color: var(--text-muted); font-size: 1.1rem;
+  padding: 6px; border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+}
+.sidebar-user .logout-btn:hover { color: var(--danger); background: var(--danger-bg); }
+
+.main-content {
+  flex: 1;
+  margin-left: 260px;
+  padding: 32px;
+  max-width: 1200px;
+}
