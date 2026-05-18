@@ -581,3 +581,24 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 .search-input {
   flex: 1; min-width: 200px; max-width: 400px;
 }
+
+
+/* ── Members Section ────────────────────────────────────── */
+.member-list { display: flex; flex-direction: column; gap: 8px; }
+.member-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.member-item .avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--gradient-accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; color: #fff; font-weight: 700;
+}
+.member-item .member-info { flex: 1; }
+.member-item .member-name { font-size: .85rem; font-weight: 600; }
+.member-item .member-email { font-size: .72rem; color: var(--text-muted); }
