@@ -1,0 +1,50 @@
+services:
+  # MongoDB 
+  mongo:
+    image: mongo:7
+    container_name: taskflow-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - taskflow-net
+
+  # Backend (Express API) 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: taskflow-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "5050:5000"
+    depends_on:
+      - mongo
+    networks:
+      - taskflow-net
+
+  #Frontend (Nginx) 
+  frontend:
+    image: nginx:alpine
+    container_name: taskflow-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - backend
+    networks:
+      - taskflow-net
+
+volumes:
+  mongo_data:
+
+networks:
+  taskflow-net:
+    driver: bridge
