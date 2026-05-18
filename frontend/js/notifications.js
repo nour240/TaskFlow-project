@@ -62,12 +62,15 @@ async function markNotifRead(id, el) {
   try {
     await API.markNotifRead(id);
     if (el) el.classList.remove('unread');
-    // Archive to localStorage
+    //  localStorage
+
+
     const archived = JSON.parse(localStorage.getItem('taskflow_archived_notifs') || '[]');
     if (!archived.includes(id)) {
       archived.push(id);
       localStorage.setItem('taskflow_archived_notifs', JSON.stringify(archived));
     }
+    
     // Re-fetch to update count
     fetchAndRenderNotifs();
   } catch (err) {
