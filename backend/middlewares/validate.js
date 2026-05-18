@@ -65,4 +65,7 @@ const validateTaskStatus = [
 module.exports = {
   validateSignup,
   validateLogin,
+  validateProject,
+  validateTask,
+  validateTaskStatus,
 };
