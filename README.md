@@ -27,8 +27,8 @@
 
 
 ## 🔐 Fonctionnalités Implémentées
-
-### ✅ F1 – Authentification
+### ✅ setup:(Nour Hammadi)
+### ✅ F1 – Authentification(Nour Hammadi)
 - Inscription & connexion avec validation des champs
 - Mot de passe haché avec `bcryptjs` (10 rounds)
 - JWT généré côté serveur, stocké dans `localStorage`
@@ -40,7 +40,7 @@
 
 ---
 
-### ✅ F2 – Gestion des projets
+### ✅ F2 – Gestion des projets(Sara El Rebbate)
 - Création, modification, suppression de projets
 - Champs : titre, description, date limite (optionnelle), statut (`actif`, `en pause`, `archivé`)
 - Relation `owner` vers `users`
@@ -51,7 +51,7 @@
 
 ---
 
-### ✅ F3 – Gestion des tâches
+### ✅ F3 – Gestion des tâches(Douae Beghiel)
 - Tâches avec : titre, priorité (`basse`, `moyenne`, `haute`), statut (`à faire`, `en cours`, `terminé`)
 - Validation des champs via `enum` dans Mongoose et Express
 - Routes CRUD : `GET`, `POST`, `PUT`, `DELETE` sur `/api/tasks/:id`
@@ -62,7 +62,7 @@
 
 ---
 
-### ✅ F4 – Assignation des tâches aux membres
+### ✅ F4 – Assignation des tâches aux membres(Nour Hammadi)
 - Champ `assignedTo` dans le modèle `Task` (référence à `User`)
 - `.populate()` avec projection (`nom`, `email`) → pas de mot de passe
 - Menu déroulant dynamique dans l’interface (appel Axios)
@@ -73,7 +73,7 @@
 
 ---
 
-### ✅ F5 – Tableau de bord personnel
+### ✅ F5 – Tableau de bord personnel(Sara El Rebbate)
 - Affichage des métriques :
   - Nombre de projets actifs
   - Tâches assignées
@@ -87,7 +87,7 @@
 
 ---
 
-### ✅ F6 – Filtrage, recherche et pagination
+### ✅ F6 – Filtrage, recherche et pagination(Douae Beghiel)
 - Contrôles : filtre par statut, priorité, membre assigné
 - Barre de recherche (mot-clé dans titre/description) avec `$regex` (option `i`)
 - Paramètres query : `status`, `priority`, `member`, `q`, `page`, `limit`
@@ -99,7 +99,7 @@
 
 ---
 
-### ✅ F7 – Sauvegarde automatique des brouillons
+### ✅ F7 – Sauvegarde automatique des brouillons(Nour Hammadi)
 - Sauvegarde en `localStorage` à chaque `input` dans le formulaire de tâche
 - Clé : `draft:projectId`
 - Restauration automatique au chargement du formulaire
@@ -110,7 +110,7 @@
 
 ---
 
-### ✅ F8 – Gestion des membres d’un projet
+### ✅ F8 – Gestion des membres d’un projet(Sara El Rebbate)
 - Invitation par email (vérification de l’existence du compte)
 - Membre invité : accès en lecture seule au projet
 - Ne peut modifier que les tâches assignées
@@ -121,7 +121,7 @@
 
 ---
 
-### ✅ F9 – Historique des activités
+### ✅ F9 – Historique des activités(Douae Beghiel)
 - Collection `activities` : type d’action, projet, utilisateur, horodatage
 - Événements tracés :
   - Création/suppression de tâche
@@ -135,7 +135,7 @@
 
 ---
 
-### ✅ F10 – Notifications en temps réel
+### ✅ F10 – Notifications en temps réel(Nour Hammadi)
 - Notifications déclenchées par :
   - Assignation de tâche
   - Changement de statut
@@ -153,16 +153,16 @@
 ## 🔄 Workflow Git
 
 ```bash
-main (stable) ← develop ← feature/authentification
-                             ← feature/projets
-                             ← feature/taches
-                             ← feature/assignation
-                             ← feature/dashboard
-                             ← feature/filtrage
-                             ← feature/brouillons
-                             ← feature/membres
-                             ← feature/activites
-                             ← feature/notifications
+main (stable) ← develop ← feature/authentification(Nour Hammadi)
+                             ← feature/projets(Sara El Rebbate)
+                             ← feature/taches(Douae Beghiel)
+                             ← feature/assignation(Nour Hammadi)
+                             ← feature/dashboard(Sara El Rebbate)
+                             ← feature/filtrage(Douae Beghiel)
+                             ← feature/brouillons(Nour Hammadi)
+                             ← feature/membres(Sara El Rebbate)
+                             ← feature/activites(Douae Beghiel)
+                             ← feature/notifications(Nour Hammadi)
 ```
 
 - **Pull Requests** : obligatoires, lues par au moins un autre membre
@@ -182,7 +182,7 @@ git clone https://github.com/nour240/TaskFlow-project.git
 docker-compose up --build
 
 # 3. Accéder à l'application
-http://localhost:
+http://localhost:3000
 ```
 
 > ✅ **Tout le système démarre avec une seule commande** : `docker-compose up --build`
