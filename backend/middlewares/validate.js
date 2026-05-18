@@ -38,6 +38,21 @@ const validateProject = [
   handleValidation,
 ];
 
+/* ── Task validation rules ───────────────────────────── */
+const validateTask = [
+  body('title').trim().notEmpty().withMessage('Task title is required'),
+  body('project').notEmpty().withMessage('Project ID is required'),
+  body('priority')
+    .optional()
+    .isIn(['basse', 'moyenne', 'haute'])
+    .withMessage('Priority must be basse, moyenne, or haute'),
+  body('status')
+    .optional()
+    .isIn(['à faire', 'en cours', 'terminé'])
+    .withMessage('Status must be à faire, en cours, or terminé'),
+  handleValidation,
+];
+
 
 module.exports = {
   validateSignup,
