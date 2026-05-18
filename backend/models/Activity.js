@@ -5,3 +5,8 @@ const activitySchema = new mongoose.Schema(
   required: true,
   trim: true,
 },
+project: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'Project',
+  required: true,
+},
