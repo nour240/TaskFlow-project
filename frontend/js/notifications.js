@@ -66,8 +66,18 @@ async function markNotifRead(id, el) {
 
 
     const archived = JSON.parse(localStorage.getItem('taskflow_archived_notifs') || '[]');
-    if (!archived.includes(id)) {
-      archived.push(id);
+
+    // éviter doublons
+    const alreadyExists = archived.some(n => n.id === id);
+
+    if (!alreadyExists) {
+      archived.push({
+        id: id,
+        message: el?.querySelector('.notif-msg')?.textContent || '',
+        time: el?.querySelector('.notif-time')?.textContent || '',
+        archivedAt: new Date().toISOString()
+      });
+
       localStorage.setItem('taskflow_archived_notifs', JSON.stringify(archived));
     }
     
