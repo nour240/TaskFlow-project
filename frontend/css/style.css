@@ -505,3 +505,25 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 }
 .empty-state .empty-icon { font-size: 3rem; margin-bottom: 16px; }
 .empty-state h3 { color: var(--text-secondary); margin-bottom: 8px; }
+
+
+/* ── Toast ──────────────────────────────────────────────── */
+.toast-container {
+  position: fixed; top: 24px; right: 24px;
+  z-index: 9999;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.toast {
+  padding: 14px 20px;
+  border-radius: var(--radius);
+  font-size: .85rem; font-weight: 500;
+  animation: slideIn .3s ease;
+  min-width: 280px;
+}
+.toast.success { background: var(--success); color: #fff; }
+.toast.error { background: var(--danger); color: #fff; }
+.toast.info { background: var(--info); color: #fff; }
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
