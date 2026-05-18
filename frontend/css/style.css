@@ -355,3 +355,42 @@ textarea.form-control { resize: vertical; min-height: 80px; }
   border: 2px solid var(--bg-card);
 }
 .project-card .members-avatars .mini-avatar:first-child { margin-left: 0; }
+
+
+/* ── Modal ──────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.65);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+  opacity: 0; visibility: hidden;
+  transition: var(--transition);
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.active { opacity: 1; visibility: visible; }
+.modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  width: 90%; max-width: 520px;
+  max-height: 90vh; overflow-y: auto;
+  transform: scale(.9) translateY(20px);
+  transition: var(--transition);
+}
+.modal-overlay.active .modal { transform: scale(1) translateY(0); }
+.modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 24px;
+}
+.modal-header h3 { font-size: 1.15rem; font-weight: 700; }
+.modal-close {
+  background: none; border: none;
+  color: var(--text-muted); font-size: 1.3rem;
+  padding: 4px; cursor: pointer;
+  transition: var(--transition-fast);
+}
+.modal-close:hover { color: var(--danger); }
+.modal-footer {
+  display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px;
+}
