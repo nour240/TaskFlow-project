@@ -13,3 +13,4 @@ const limit = Math.min(
 );
 
 const skip  = (page - 1) * limit;
+const filter = { project: req.params.id };
