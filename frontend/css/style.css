@@ -602,3 +602,29 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 .member-item .member-info { flex: 1; }
 .member-item .member-name { font-size: .85rem; font-weight: 600; }
 .member-item .member-email { font-size: .72rem; color: var(--text-muted); }
+
+
+
+/* ── Draft indicator ────────────────────────────────────── */
+.draft-indicator {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  background: var(--warning-bg);
+  color: var(--warning);
+  border-radius: 20px;
+  font-size: .72rem; font-weight: 600;
+  opacity: 0;
+  transform: translateY(-4px) scale(.9);
+  transition: opacity .3s ease, transform .3s ease;
+  pointer-events: none;
+}
+.draft-indicator.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  animation: draftPulse 2s ease-in-out 1;
+}
+@keyframes draftPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+  50% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.2); }
+}
