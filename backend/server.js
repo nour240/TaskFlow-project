@@ -34,6 +34,7 @@ app.use('/api/tasks',         taskRoutes);
 
 // DASHBOARD ROUTES
 app.use('/api/dashboard',     dashboardRoutes);
+//ajout de notifications
 app.use('/api/notifications', notificationRoutes);
 
 //Health check 

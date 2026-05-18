@@ -205,7 +205,7 @@ const updateTaskStatus = async (req, res) => {
       meta: { taskId: task._id, oldStatus, newStatus: task.status },
     });
 
-    // Notify relevant users about status change
+    // ajout de notification quand une tâche est assignée ou son statut change
     const notifyUsers = new Set();
     if (project.creator.toString() !== userId) notifyUsers.add(project.creator.toString());
     if (task.assignedTo && task.assignedTo.toString() !== userId) notifyUsers.add(task.assignedTo.toString());
