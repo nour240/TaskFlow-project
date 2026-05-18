@@ -651,3 +651,10 @@ textarea.form-control { resize: vertical; min-height: 80px; }
   margin: 40px auto;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
