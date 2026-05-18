@@ -52,6 +52,14 @@ const validateTask = [
     .withMessage('Status must be à faire, en cours, or terminé'),
   handleValidation,
 ];
+/* ── Task status-only validation ─────────────────────── */
+const validateTaskStatus = [
+  body('status')
+    .notEmpty()
+    .isIn(['à faire', 'en cours', 'terminé'])
+    .withMessage('Status must be à faire, en cours, or terminé'),
+  handleValidation,
+];
 
 
 module.exports = {
